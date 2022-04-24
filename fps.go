@@ -69,7 +69,6 @@ func Search(name, city, state string) (People, error) {
 			}
 		})
 
-
 		people.People = append(people.People, person)
 	})
 
@@ -93,7 +92,7 @@ func createLink(name, city, state string) (*url.URL, error) {
 	return url, nil
 }
 
-func (people People) SearchPeopleByAgegroup(ageGroup AgeGroup) People {
+func (people People) SearchPeopleByAgeGroup(ageGroup AgeGroup) People {
 	var result People
 
 	for _, person := range people.People {
