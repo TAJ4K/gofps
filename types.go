@@ -1,18 +1,18 @@
 package gofps
 
 type Person struct {
-	Name string
+	Name   string
 	GoesBy string
-	Age string
+	Age    string
 
 	Addresses struct {
 		Current string
-		Past []string
+		Past    []string
 	}
 
 	Phones struct {
 		Current string
-		Past []string
+		Past    []string
 	}
 }
 
@@ -21,16 +21,20 @@ type People struct {
 }
 
 type AgeGroup struct {
-	Min int64 
+	Min int64
 	Max int64
 }
 
-var AgeGroupYoung = AgeGroup{Min: 18, Max: 28}
-var AgeGroupMiddle = AgeGroup{Min: 28, Max: 45}
-var AgeGroupOld = AgeGroup{Min: 45, Max: 100}
+var (
+	AgeGroupYoung  = AgeGroup{Min: 18, Max: 28}
+	AgeGroupMiddle = AgeGroup{Min: 28, Max: 45}
+	AgeGroupOld    = AgeGroup{Min: 45, Max: 100}
+)
 
-var AgeGroupGenZ = AgeGroup{Min: 18, Max: 25}
-var AgeGroupMillenials = AgeGroup{Min: 25, Max: 41}
-var AgeGroupGenX = AgeGroup{Min: 41, Max: 57}
-var AgeGroupBoomers = AgeGroup{Min: 57, Max: 76}
-var AgeGroupSilent = AgeGroup{Min: 76, Max: 100}
+var (
+	AgeGroupGenZ       = AgeGroup{Min: 18, Max: 25}
+	AgeGroupMillenials = AgeGroup{Min: 25, Max: 41}
+	AgeGroupGenX       = AgeGroup{Min: 41, Max: 57}
+	AgeGroupBoomers    = AgeGroup{Min: 57, Max: 76}
+	AgeGroupSilent     = AgeGroup{Min: 76, Max: 100}
+)

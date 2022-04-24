@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"strings"
 	"strconv"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -13,9 +13,15 @@ import (
 func Search(name, city, state string) (People, error) {
 	var people People
 
-	if name == "" {return People{}, fmt.Errorf("name is required")}
-	if state == "" {return People{}, fmt.Errorf("state is required")}
-	if len(state) > 2 {return People{}, fmt.Errorf("state is invalid, use 2 character abbreviation")}
+	if name == "" {
+		return People{}, fmt.Errorf("name is required")
+	}
+	if state == "" {
+		return People{}, fmt.Errorf("state is required")
+	}
+	if len(state) > 2 {
+		return People{}, fmt.Errorf("state is invalid, use 2 character abbreviation")
+	}
 
 	url, err := createLink(name, city, state)
 	if err != nil {
@@ -29,7 +35,9 @@ func Search(name, city, state string) (People, error) {
 
 	defer resp.Body.Close()
 
-	if resp.StatusCode != 200 {return People{}, fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)}
+	if resp.StatusCode != 200 {
+		return People{}, fmt.Errorf("status code error: %d %s", resp.StatusCode, resp.Status)
+	}
 
 	doc, err := goquery.NewDocumentFromReader(resp.Body)
 	if err != nil {
@@ -43,6 +51,10 @@ func Search(name, city, state string) (People, error) {
 		person.Age = strings.Replace(strings.Split(s.Text(), "\n")[4], "Age: ", "", -1)
 
 		person.Addresses.Current = strings.Replace(s.Find("div > strong > a:not(.nowrap)").Text(), "\n", " ", -1)
+
+		if person.Addresses.Current[0] == ' ' {
+			person.Addresses.Current = person.Addresses.Current[1:]
+		}
 
 		s.Find(".row > div > a").Each(func(i int, s *goquery.Selection) {
 			person.Addresses.Past = append(person.Addresses.Past, strings.Replace(s.Text(), "\n", " ", -1))
@@ -62,29 +74,35 @@ func Search(name, city, state string) (People, error) {
 func createLink(name, city, state string) (*url.URL, error) {
 	var data string
 
-	if city == ""{
+	if city == "" {
 		data = strings.Replace(name, " ", "-", -1) + "_" + state
 	} else {
 		data = strings.Replace(name, " ", "-", -1) + "_" + city + "-" + state
 	}
-	
+
 	url, err := url.Parse("https://www.fastpeoplesearch.com/name/" + data)
 	if err != nil {
 		return nil, err
 	}
 
-	return url, nil 
+	return url, nil
 }
 
 func (people People) SearchPeopleByAgegroup(ageGroup AgeGroup) People {
 	var result People
 
 	for _, person := range people.People {
-		if person.Age == "" {continue}
-		if person.Age == "0" {continue}
+		if person.Age == "" {
+			continue
+		}
+		if person.Age == "0" {
+			continue
+		}
 
 		age, err := strconv.ParseInt(person.Age, 10, 64)
-		if err != nil {continue}
+		if err != nil {
+			continue
+		}
 
 		if age >= ageGroup.Min && age <= ageGroup.Max {
 			result.People = append(result.People, person)
@@ -98,11 +116,17 @@ func (people People) SearchPeopleByAge(givenAge int64) People {
 	var result People
 
 	for _, person := range people.People {
-		if person.Age == "" {continue}
-		if person.Age == "0" {continue}
+		if person.Age == "" {
+			continue
+		}
+		if person.Age == "0" {
+			continue
+		}
 
 		age, err := strconv.ParseInt(person.Age, 10, 64)
-		if err != nil {continue}
+		if err != nil {
+			continue
+		}
 
 		if age == givenAge {
 			result.People = append(result.People, person)
