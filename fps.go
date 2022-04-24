@@ -10,28 +10,12 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-func createLink(name, city, state string) (*url.URL, error) {
-	var data string
-
-	if city == ""{
-		data = strings.Replace(name, " ", "-", -1) + "_" + state
-	} else {
-		data = strings.Replace(name, " ", "-", -1) + "_" + city + "-" + state
-	}
-	
-	url, err := url.Parse("https://www.fastpeoplesearch.com/name/" + data)
-	if err != nil {
-		return nil, err
-	}
-
-	return url, nil 
-}
-
 func Search(name, city, state string) (People, error) {
 	var people People
 
 	if name == "" {return People{}, fmt.Errorf("name is required")}
 	if state == "" {return People{}, fmt.Errorf("state is required")}
+	if len(state) > 2 {return People{}, fmt.Errorf("state is invalid, use 2 character abbreviation")}
 
 	url, err := createLink(name, city, state)
 	if err != nil {
@@ -73,6 +57,23 @@ func Search(name, city, state string) (People, error) {
 	})
 
 	return people, nil
+}
+
+func createLink(name, city, state string) (*url.URL, error) {
+	var data string
+
+	if city == ""{
+		data = strings.Replace(name, " ", "-", -1) + "_" + state
+	} else {
+		data = strings.Replace(name, " ", "-", -1) + "_" + city + "-" + state
+	}
+	
+	url, err := url.Parse("https://www.fastpeoplesearch.com/name/" + data)
+	if err != nil {
+		return nil, err
+	}
+
+	return url, nil 
 }
 
 func (people People) SearchPeopleByAgegroup(ageGroup AgeGroup) People {
