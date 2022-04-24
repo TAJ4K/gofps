@@ -1,3 +1,4 @@
+// Copyright 2022 TAJ4K
 package gofps
 
 import (
@@ -11,6 +12,8 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
+// Search takes a name, city, and state then returns a People object.
+// City is optional, but state isn't.
 func Search(name, city, state string) (People, error) {
 	var people People
 
@@ -76,6 +79,7 @@ func Search(name, city, state string) (People, error) {
 	return people, nil
 }
 
+// Internal use for creating the links
 func createLink(name, city, state string) (*url.URL, error) {
 	var data string
 
@@ -93,6 +97,7 @@ func createLink(name, city, state string) (*url.URL, error) {
 	return url, nil
 }
 
+// Takes in a AgeGroup to filter a People object
 func (people People) SearchPeopleByAgeGroup(ageGroup AgeGroup) People {
 	var result People
 
@@ -117,6 +122,7 @@ func (people People) SearchPeopleByAgeGroup(ageGroup AgeGroup) People {
 	return result
 }
 
+// Takes in a specific Age and returns all people that match
 func (people People) SearchPeopleByAge(givenAge int64) People {
 	var result People
 
@@ -141,6 +147,7 @@ func (people People) SearchPeopleByAge(givenAge int64) People {
 	return result
 }
 
+// Converts People struct to JSON
 func (people People) ConvertToJson() (string, error) {
 	json, err := json.Marshal(people)
 	if err != nil {
@@ -150,6 +157,7 @@ func (people People) ConvertToJson() (string, error) {
 	return string(json), nil
 }
 
+// Converts Person struct to JSON
 func (person Person) ConvertToJson() (string, error) {
 	json, err := json.Marshal(person)
 	if err != nil {
