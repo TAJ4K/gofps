@@ -6,6 +6,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"encoding/json"
 
 	"github.com/PuerkitoBio/goquery"
 )
@@ -138,4 +139,22 @@ func (people People) SearchPeopleByAge(givenAge int64) People {
 	}
 
 	return result
+}
+
+func (people People) ConvertToJson() (string, error) {
+	json, err := json.Marshal(people)
+	if err != nil {
+		return "", err
+	}
+
+	return string(json), nil
+}
+
+func (person Person) ConvertToJson() (string, error) {
+	json, err := json.Marshal(person)
+	if err != nil {
+		return "", err
+	}
+
+	return string(json), nil
 }
