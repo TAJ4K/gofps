@@ -61,9 +61,14 @@ func Search(name, city, state string) (People, error) {
 		})
 
 		person.Phones.Current = s.Find("strong > .nowrap").Text()
-		s.Find(".nowrap").Each(func(i int, s *goquery.Selection) {
-			person.Phones.Past = append(person.Phones.Past, strings.Replace(s.Text(), "\n", " ", -1))
+		s.Find("a.nowrap").Each(func(i int, s *goquery.Selection) {
+			if s.Text()[0] == '(' {
+				person.Phones.Past = append(person.Phones.Past, s.Text())
+			} else {
+				person.Relatives = append(person.Relatives, s.Text())
+			}
 		})
+
 
 		people.People = append(people.People, person)
 	})

@@ -14,6 +14,8 @@ type Person struct {
 		Current string
 		Past    []string
 	}
+
+	Relatives []string
 }
 
 type People struct {
